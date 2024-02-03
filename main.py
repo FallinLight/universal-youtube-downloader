@@ -26,7 +26,6 @@ class YoutubeDownload:
     def download_link(self, link):
         
         def progressFunction(stream, chunk, bitesRemaining):
-            print("PROGRESS")
             self.progress = 100 - percent(bitesRemaining, stream.filesize)
 
         yt = YouTube(link, on_progress_callback=progressFunction)
@@ -44,11 +43,11 @@ class YoutubeDownload:
         download_thread = threading.Thread(target=self.download_link, name="Downloader", args=[link])
         download_thread.start()
     
-download = YoutubeDownload()
+#download = YoutubeDownload()
 
-download.download_link_async("https://www.youtube.com/watch?v=fuLkcBxB8v0")
+#download.download_link_async("https://www.youtube.com/watch?v=fuLkcBxB8v0")
 
-otherDownload = YoutubeDownload()
+#otherDownload = YoutubeDownload()
 
-otherDownload.download_link_async("https://www.youtube.com/watch?v=Pcrkw4VLrcM")
+#otherDownload.download_link_async("https://www.youtube.com/watch?v=Pcrkw4VLrcM")
 
