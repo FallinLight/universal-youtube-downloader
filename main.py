@@ -21,6 +21,7 @@ class YoutubeDownload:
 
     def __init__(self):
         self.progress = 0
+        self.thread: threading.Thread
 
 
     def download_link(self, link):
@@ -41,7 +42,8 @@ class YoutubeDownload:
     
     def download_link_async(self, link):
         download_thread = threading.Thread(target=self.download_link, name="Downloader", args=[link])
-        download_thread.start()
+        self.thread = download_thread
+        self.thread.start()
     
 #download = YoutubeDownload()
 
