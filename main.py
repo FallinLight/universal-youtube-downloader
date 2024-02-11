@@ -7,7 +7,9 @@ def percent(tem, total):
         perc = (float(tem) / float(total)) * float(100)
         return perc
 
-
+def get_highest_resolution(self, link):
+         print(YouTube(link).streams.get_highest_resolution().resolution)
+         return YouTube(link).streams.get_highest_resolution().resolution
 
 #def progress_function(stream, chunk, bitesRemaining):
 #        size = stream.filesize
@@ -22,7 +24,6 @@ class YoutubeDownload:
     def __init__(self):
         self.progress = 0
         self.thread: threading.Thread
-
 
     def download_link(self, link):
         
