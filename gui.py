@@ -31,7 +31,7 @@ progress_bar.set(0)
 progress_bar.grid(row=2, column=0, padx=25, pady=25)
 #progress_bar.place(anchor = CENTER, relx = 0.5, rely = 0.75)
 
-
+#Button on-click function
 def async_download():
     linkVal = linkInput.get()
     download = YoutubeDownload()
@@ -45,33 +45,41 @@ button.grid(row=1, column = 0, padx=25, pady=0, sticky="ew")
 
 ############## SETTINGS SELECT ####################
 
+#Settings Frame
 root.grid_columnconfigure(1, weight=0)
 settings_frame = customtkinter.CTkFrame(master=root)
 settings_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsw")
 
+#Resolution dropdown
 resolution_dropdown = customtkinter.CTkOptionMenu(master=root, values=effectiveRes)
 resolution_dropdown.grid(row=0, column=1, padx=10, pady=10)
 
-linkProxy = linkInput.get()
-
+#Update Resolution list
 def resetResList():
-    print(link.get())
+
+    #Lock resolution dropdown while processing resolutions
+    resolution_dropdown.configure(state="disabled")
+
+    #Get max resolution and create proxy resolution list
     maxRes = get_highest_resolution(link=link.get())
     effectiveRes = ["240p", "360p", "480p", "720p", "1080p"]
 
+    #Remove unwanted resolutions
     for r in resolutions:
-        print(r)
         if int(r.removesuffix("p")) > int(maxRes.removesuffix("p")):
-            print(r)
             effectiveRes.remove(r)
 
-    resolution_dropdown.configure(values=effectiveRes)
+    #Update dropdown
+    resolution_dropdown.configure(values=effectiveRes, state="normal")
 
+#Create a thread to filter resolutions
 def link_callback(*args):
     newThread = threading.Thread(target=resetResList, name="Slambino")
     newThread.start()
 
 link.trace_add(mode="write", callback=link_callback)
+
+###########################################################################
 
 def second_loop():
     if(downloads):
