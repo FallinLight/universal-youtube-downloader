@@ -46,13 +46,17 @@ button.grid(row=1, column = 0, padx=25, pady=0, sticky="ew")
 ############## SETTINGS SELECT ####################
 
 #Settings Frame
-root.grid_columnconfigure(1, weight=0)
+root.grid_columnconfigure(1, weight=1)
 settings_frame = customtkinter.CTkFrame(master=root)
 settings_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsw")
 
+#Type dropdown
+type_dropdown = customtkinter.CTkOptionMenu(master=settings_frame, values=["Audio", "Video"])
+type_dropdown.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
+
 #Resolution dropdown
-resolution_dropdown = customtkinter.CTkOptionMenu(master=root, values=effectiveRes)
-resolution_dropdown.grid(row=0, column=1, padx=10, pady=10)
+resolution_dropdown = customtkinter.CTkOptionMenu(master=settings_frame, values=effectiveRes)
+resolution_dropdown.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
 
 #Update Resolution list
 def resetResList():
