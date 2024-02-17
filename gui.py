@@ -11,11 +11,10 @@ root = customtkinter.CTk()
 root.title("Universal Youtube Downloader")
 root.geometry("480x300")
 
-link = StringVar()
-def link_callback(*args):
-    print(link.get())
+resolutions = ["240p", "360p", "480p", "720p", "1080p"]
+effectiveRes = resolutions
 
-link.trace_add(mode="write", callback=link_callback)
+link = StringVar()
 
 ############## DOWNLOAD PROMPT ####################
 
@@ -46,16 +45,33 @@ button.grid(row=1, column = 0, padx=25, pady=0, sticky="ew")
 
 ############## SETTINGS SELECT ####################
 
-root.grid_columnconfigure(1, weight=1)
+root.grid_columnconfigure(1, weight=0)
 settings_frame = customtkinter.CTkFrame(master=root)
 settings_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsw")
 
-resolutions = ["240p", "360p", "480p", "720p", "1080p"]
-
-resolution_dropdown = customtkinter.CTkOptionMenu(master=root, values=resolutions)
+resolution_dropdown = customtkinter.CTkOptionMenu(master=root, values=effectiveRes)
 resolution_dropdown.grid(row=0, column=1, padx=10, pady=10)
 
 linkProxy = linkInput.get()
+
+def resetResList():
+    print(link.get())
+    maxRes = get_highest_resolution(link=link.get())
+    effectiveRes = ["240p", "360p", "480p", "720p", "1080p"]
+
+    for r in resolutions:
+        print(r)
+        if int(r.removesuffix("p")) > int(maxRes.removesuffix("p")):
+            print(r)
+            effectiveRes.remove(r)
+
+    resolution_dropdown.configure(values=effectiveRes)
+
+def link_callback(*args):
+    newThread = threading.Thread(target=resetResList, name="Slambino")
+    newThread.start()
+
+link.trace_add(mode="write", callback=link_callback)
 
 def second_loop():
     if(downloads):

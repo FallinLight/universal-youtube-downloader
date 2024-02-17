@@ -7,7 +7,7 @@ def percent(tem, total):
         perc = (float(tem) / float(total)) * float(100)
         return perc
 
-def get_highest_resolution(self, link):
+def get_highest_resolution(link):
          print(YouTube(link).streams.get_highest_resolution().resolution)
          return YouTube(link).streams.get_highest_resolution().resolution
 
