@@ -15,6 +15,8 @@ resolutions = ["240p", "360p", "480p", "720p", "1080p"]
 effectiveRes = resolutions
 
 link = StringVar()
+download_type = StringVar()
+selectedRes = StringVar()
 
 ############## DOWNLOAD PROMPT ####################
 
@@ -36,7 +38,7 @@ def async_download():
     linkVal = linkInput.get()
     download = YoutubeDownload()
     downloads.append(download)
-    download.download_link_async(linkVal)
+    download.download_link_async(link=linkVal, download_type=download_type, resolution=selectedRes)
 
 button = customtkinter.CTkButton(master=frame, text="Download", command=async_download)
 button.grid(row=1, column = 0, padx=25, pady=0, sticky="ew")
@@ -51,12 +53,14 @@ settings_frame = customtkinter.CTkFrame(master=root)
 settings_frame.grid(row=0, column=1, padx=10, pady=10, sticky="nsw")
 
 #Type dropdown
-type_dropdown = customtkinter.CTkOptionMenu(master=settings_frame, values=["Audio", "Video"])
+type_dropdown = customtkinter.CTkOptionMenu(master=settings_frame, values=["Audio", "Video"], variable=download_type)
+type_dropdown.set("Video")
 type_dropdown.grid(row=0, column=1, padx=10, pady=10, sticky="ew")
 
 #Resolution dropdown
-resolution_dropdown = customtkinter.CTkOptionMenu(master=settings_frame, values=effectiveRes)
+resolution_dropdown = customtkinter.CTkOptionMenu(master=settings_frame, values=effectiveRes, variable=selectedRes)
 resolution_dropdown.grid(row=1, column=1, padx=10, pady=10, sticky="ew")
+resolution_dropdown.set("240p")
 
 #Update Resolution list
 def resetResList():
@@ -81,7 +85,11 @@ def link_callback(*args):
     newThread = threading.Thread(target=resetResList, name="Slambino")
     newThread.start()
 
+def type_change_callback(*args):
+    print(download_type.get())
+
 link.trace_add(mode="write", callback=link_callback)
+download_type.trace_add(mode="write", callback=type_change_callback)
 
 ###########################################################################
 

@@ -2,6 +2,7 @@ from pytube import YouTube, Stream
 from sys import argv
 import threading
 import time
+import os
 
 def percent(tem, total):
         perc = (float(tem) / float(total)) * float(100)
@@ -25,7 +26,7 @@ class YoutubeDownload:
         self.progress = 0
         self.thread: threading.Thread
 
-    def download_link(self, link):
+    def download_link(self, link, download_type = "Video", resolution = "240p"):
         
         def progressFunction(stream, chunk, bitesRemaining):
             self.progress = 100 - percent(bitesRemaining, stream.filesize)
@@ -35,14 +36,23 @@ class YoutubeDownload:
         print("Title: ", yt.title)
         print("Views: ", yt.views)
 
-        stream = yt.streams.get_highest_resolution()
+        if(download_type == "Video"):
+            stream = yt.streams.get_by_resolution(resolution=resolution)
+        else:
+             stream = yt.streams.get_audio_only()
 
-        stream.download("./")
+        out_file = stream.download("./")
+        file_name = yt.title
         self.stream = stream
 
+        if download_type == "Audio":
+            base, ext = os.path.splitext(out_file)
+            new_file = base + ".mp3"
+            os.rename(out_file, new_file)
+
     
-    def download_link_async(self, link):
-        download_thread = threading.Thread(target=self.download_link, name="Downloader", args=[link])
+    def download_link_async(self, link, download_type = "Video", resolution = "240p"):
+        download_thread = threading.Thread(target=self.download_link, name="Downloader", args=[link, download_type, resolution])
         self.thread = download_thread
         self.thread.start()
     
